@@ -5,7 +5,7 @@ public record Card(int value, Suit suit) {
         if (value < 2 || value > 14) throw new IllegalArgumentException("Invalid Int Value: " + value);
     }
 
-    public static int convertValueToInt(char value) {
+    public static int convertValueToInt(char value) throws IllegalArgumentException {
         int intValue = 0;
         if (Character.isDigit(value)) intValue = value - '0';
 
@@ -21,7 +21,7 @@ public record Card(int value, Suit suit) {
         };
     }
 
-    public static String convertValueToString(int value) {
+    public static String convertValueToString(int value) throws IllegalArgumentException {
 
         if (value >= 2 && value <= 9) return Integer.toString(value);
 

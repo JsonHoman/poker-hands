@@ -9,7 +9,7 @@ public class Hand {
     private HandRank rank;
     public static final int HAND_SIZE = 5;
 
-    public Hand(Card[] cards, Player player) {
+    public Hand(Card[] cards, Player player) throws IllegalArgumentException {
         if (cards == null) {
             throw new IllegalArgumentException("A hand must have exactly " + HAND_SIZE + " cards. Input cards can't be null");
         } else if (cards.length != HAND_SIZE) {
@@ -22,7 +22,7 @@ public class Hand {
         this.player = player;
     }
 
-    public HandRank evaluateHand() {
+    public HandRank evaluateHand() throws IllegalStateException {
         if (this.rank != null) return this.rank;
 
         Map<Integer, Integer> cardValueFreq = calculateCardValueFrequency();
@@ -54,7 +54,7 @@ public class Hand {
         return this.rank;
     }
 
-    private HandRank evaluateTwoPairOrFullHouse(Map<Integer, Integer> cardValueFreq) {
+    private HandRank evaluateTwoPairOrFullHouse(Map<Integer, Integer> cardValueFreq) throws InvalidFreqOfAKindException {
         int cardFreq;
         int cardVal;
         int maxFreq = 0;
@@ -87,7 +87,7 @@ public class Hand {
         };
     }
 
-    private HandRank evaluateMultiplesOfAKind(Map<Integer, Integer> cardValueFreq) {
+    private HandRank evaluateMultiplesOfAKind(Map<Integer, Integer> cardValueFreq) throws InvalidMultiplesFreqException, InvalidFreqOfAKindException {
         int highCardVal = -1;
         int valueFreq = 0;
 

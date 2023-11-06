@@ -1,9 +1,6 @@
 package com.ravtech.poker.model;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.logging.Level;
 
 import static com.ravtech.poker.Main.log;
@@ -14,32 +11,41 @@ public final class Round {
     }
 
     public static String evaluateRoundWinner(String input) {
-        List<Hand> hands = parseHands(input);
+        String roundResult;
 
-        Hand bestHand = hands.get(0);
+        try {
+            List<Hand> hands = parseHands(input);
 
-        boolean isTie = false;
-        int comparisonVal;
-        Set<Hand> ties = new HashSet<>();
-        for (int i = 1; i < hands.size(); i++) {
-            Hand currentHand = hands.get(i);
+            Hand bestHand = hands.get(0);
 
-            comparisonVal = compareHands(currentHand, bestHand);
-            if (comparisonVal > 0) {
-                isTie = false;
-                ties.clear();
+            boolean isTie = false;
+            int comparisonVal;
+            Set<Hand> ties = new LinkedHashSet<>();
+            for (int i = 1; i < hands.size(); i++) {
+                Hand currentHand = hands.get(i);
 
-                bestHand = currentHand;
-            } else if (comparisonVal == 0) {
-                isTie = true;
-                ties.add(currentHand);
-                ties.add(bestHand);
+                comparisonVal = compareHands(currentHand, bestHand);
+                if (comparisonVal > 0) {
+                    isTie = false;
+                    ties.clear();
+
+                    bestHand = currentHand;
+                } else if (comparisonVal == 0) {
+                    isTie = true;
+                    ties.add(bestHand);
+                    ties.add(currentHand);
+                }
             }
+
+            roundResult = constructRoundResult(isTie, ties, bestHand);
+
+            log(Level.INFO, roundResult);
+
+        } catch (Exception e) {
+            roundResult = "Error: " + e.getMessage();
+
+            log(Level.SEVERE, "An exception occurred: " + e);
         }
-
-        String roundResult = constructRoundResult(isTie, ties, bestHand);
-
-        log(Level.INFO, roundResult);
 
         return roundResult;
     }
@@ -57,7 +63,7 @@ public final class Round {
         return rank1.highestValue() - rank2.highestValue();
     }
 
-    private static String constructRoundResult(boolean isTie, Set<Hand> ties, Hand bestHand) {
+    private static String constructRoundResult(boolean isTie, Set<Hand> ties, Hand bestHand) throws IllegalArgumentException {
         String roundResult;
         String playerNames;
 
