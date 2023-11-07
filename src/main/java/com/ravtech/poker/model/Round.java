@@ -54,55 +54,104 @@ public final class Round {
         HandRank rank1 = hand1.evaluateHand();
         HandRank rank2 = hand2.evaluateHand();
 
-        int handTypeComparison = rank1.handType().getHandTypeGrade() - rank2.handType().getHandTypeGrade();
+        int handTypeComparison = rank1.getHandType().getHandTypeGrade() - rank2.getHandType().getHandTypeGrade();
 
         if (handTypeComparison != 0) {
             return handTypeComparison;
+        // A HIGH CARD tie is a special scenario.
+        } else if (rank1.getHandType() == HandType.HIGH_CARD && rank2.getHandType() == HandType.HIGH_CARD) {
+            return getHighestCardTieComparison(hand1, hand2);
         }
 
-        return rank1.highestValue() - rank2.highestValue();
+        return rank1.getHighestValue() - rank2.getHighestValue();
+    }
+
+    private static int getHighestCardTieComparison(Hand hand1, Hand hand2) {
+        Card[] hand1Cards = hand1.getCards();
+        Card[] hand2Cards = hand2.getCards();
+
+        int highestValComparison = 0;
+        // Cards are sorted in ascending order, so we decrement our comparison values.
+        for (int i = Hand.HAND_SIZE - 1; i >= 0; i--) {
+            highestValComparison = hand1Cards[i].value() - hand2Cards[i].value();
+
+            // If we find a comparison to break the tie we return it immediately.
+            if (highestValComparison > 0) {
+                hand1.getHandRank().setTieBreakerValue(hand1Cards[i].value());
+
+                return highestValComparison;
+            } else if (highestValComparison < 0) {
+                hand2.getHandRank().setTieBreakerValue(hand2Cards[i].value());
+
+                return highestValComparison;
+            }
+        }
+
+        return highestValComparison;
     }
 
     private static String constructRoundResult(boolean isTie, Set<Hand> ties, Hand bestHand) throws IllegalArgumentException {
         String roundResult;
+        String playerNames = getPlayerNames(isTie, ties, bestHand);
+
+        HandRank bestHandRank = bestHand.getHandRank();
+        HandType handType = bestHandRank.getHandType();
+        String handTypeStr = HandType.convertToTitleCase(handType.toString());
+        String highestValueStr = Card.convertValueToString(bestHandRank.getHighestValue());
+
+        switch (handType) {
+            case FULL_HOUSE:
+                Card[] bestHandCards = bestHand.getCards();
+                int highCardValue = bestHandRank.getHighestValue();
+                int lowerPairValue = Integer.MAX_VALUE;
+
+                for (Card card : bestHandCards) {
+                    if (card.value() != highCardValue && card.value() < lowerPairValue) {
+                        lowerPairValue = card.value();
+                    }
+                }
+
+                roundResult = String.format("%s wins. - with %s: %s over %s", playerNames, handTypeStr, highestValueStr, lowerPairValue);
+                break;
+            case STRAIGHT_FLUSH:
+                roundResult = String.format("%s wins. - with %s: %s", playerNames, "royal flush", highestValueStr);
+                break;
+            case HIGH_CARD:
+                if (!isTie) {
+                    int tieBreakerValue = bestHandRank.getTieBreakerValue();
+                    String valueStr = (tieBreakerValue != 0) ? Card.convertValueToString(tieBreakerValue) : highestValueStr;
+                    roundResult = String.format("%s wins. - with %s: %s", playerNames, handTypeStr, valueStr);
+                } else {
+                    roundResult = String.format("%s tie. - with %s: %s", playerNames, handTypeStr, highestValueStr);
+                }
+                break;
+            default:
+                roundResult = (isTie) ? String.format("%s tie. - with %s: %s", playerNames, handTypeStr, highestValueStr) :
+                        String.format("%s wins. - with %s: %s", playerNames, handTypeStr, highestValueStr);
+                break;
+        }
+
+        return roundResult;
+    }
+
+    private static String getPlayerNames(boolean isTie, Set<Hand> ties, Hand bestHand) {
         String playerNames;
 
         if (isTie) {
             StringBuilder tieResult = new StringBuilder();
+
             for (Hand hand : ties) {
                 tieResult.append(hand.getPlayer().name()).append(" & ");
             }
+
             tieResult.setLength(tieResult.length() - 3); // Remove the trailing " & "
-            tieResult.append(" tie.");
+
             playerNames = tieResult.toString();
         } else {
             playerNames = bestHand.getPlayer().name();
         }
 
-        String handType = HandType.convertToTitleCase(bestHand.getHandRank().handType().toString());
-        String highestValue = Card.convertValueToString(bestHand.getHandRank().highestValue());
-
-        if (bestHand.getHandRank().handType() == HandType.FULL_HOUSE) {
-            Card[] bestHandCards = bestHand.getCards();
-            int highCardValue = bestHand.getHandRank().highestValue();
-            int lowerPairValue = Integer.MAX_VALUE;
-
-            for (Card card : bestHandCards) {
-                if (card.value() != highCardValue && card.value() < lowerPairValue) {
-                    lowerPairValue = card.value();
-                }
-            }
-
-            roundResult = String.format("%s wins. - with %s: %s over %s", playerNames, handType, highestValue, lowerPairValue);
-        } else if (bestHand.getHandRank().handType() == HandType.STRAIGHT_FLUSH) {
-            roundResult = String.format("%s wins. - with %s: %s", playerNames, "royal flush", highestValue);
-        } else if (!isTie) {
-            roundResult = String.format("%s wins. - with %s: %s", playerNames, handType, highestValue);
-        } else {
-            roundResult = String.format("%s - with %s: %s", playerNames, handType, highestValue);
-        }
-
-        return roundResult;
+        return playerNames;
     }
 
     private static List<Hand> parseHands(String input) {

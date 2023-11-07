@@ -1,6 +1,5 @@
-package ravtech.poker.model;
+package com.ravtech.poker.model;
 
-import com.ravtech.poker.model.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -19,8 +18,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.STRAIGHT_FLUSH, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.STRAIGHT_FLUSH, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -33,8 +32,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.PAIR, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.PAIR, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -47,8 +46,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.THREE_OF_A_KIND, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.THREE_OF_A_KIND, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -61,8 +60,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.FOUR_OF_A_KIND, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.FOUR_OF_A_KIND, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -75,8 +74,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.TWO_PAIR, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.TWO_PAIR, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -91,8 +90,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.FULL_HOUSE, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.FULL_HOUSE, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -107,8 +106,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.FULL_HOUSE, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.FULL_HOUSE, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -121,8 +120,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.FLUSH, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.FLUSH, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -135,8 +134,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.STRAIGHT, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.STRAIGHT, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     @Test
@@ -149,8 +148,8 @@ class HandTest {
         HandRank result = hand.evaluateHand();
 
         // then
-        assertEquals(HandType.HIGH_CARD, result.handType());
-        assertEquals(expectedHighCardVal, result.highestValue());
+        assertEquals(HandType.HIGH_CARD, result.getHandType());
+        assertEquals(expectedHighCardVal, result.getHighestValue());
     }
 
     private Hand createHandWithStraightFlush() {

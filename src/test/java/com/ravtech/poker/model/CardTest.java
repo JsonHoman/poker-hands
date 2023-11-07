@@ -1,6 +1,5 @@
-package ravtech.poker.model;
+package com.ravtech.poker.model;
 
-import com.ravtech.poker.model.Card;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 

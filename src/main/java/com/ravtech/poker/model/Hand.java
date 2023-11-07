@@ -47,7 +47,7 @@ public class Hand {
             this.rank = new HandRank(defaultHighCardVal, HandType.HIGH_CARD);
         }
 
-        if (this.rank.highestValue() == -1) {
+        if (this.rank.getHighestValue() == -1) {
             throw new IllegalStateException("Invalid High Card Value");
         }
 

@@ -1,6 +1,5 @@
-package ravtech.poker.model;
+package com.ravtech.poker.model;
 
-import com.ravtech.poker.model.Round;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -39,6 +38,38 @@ class RoundTest {
         String result = Round.evaluateRoundWinner(input);
 
         assertEquals("White wins. - with full house: 3 over 2", result);
+    }
+
+    @Test
+    void testEvaluateRoundWinnerNoTieSecondHighCardWin() {
+        String input = "Black: 2H 3D 4S 5C 8D  White: 3S 8H 9C QC KD  Blue: 5H 7D 9S JC KC";
+        String result = Round.evaluateRoundWinner(input);
+
+        assertEquals("White wins. - with high card: Queen", result);
+    }
+
+    @Test
+    void testEvaluateRoundWinnerTieHighCardAllTheWayDown() {
+        String input = "Black: 2H 3H 4H 5H 8D  White: 2D 3D 4D 5D 8H";
+        String result = Round.evaluateRoundWinner(input);
+
+        assertEquals("Black & White tie. - with high card: 8", result);
+    }
+
+    @Test
+    void testEvaluateRoundWinnerTieWithSecondHighCardWinInAnotherPlayer() {
+        String input = "Black: 2H 3H 4H 5H 8D  White: 2D 3D 4D 5D 8H  Blue: 2S 3S 4S 6S 8C";
+        String result = Round.evaluateRoundWinner(input);
+
+        assertEquals("Blue wins. - with high card: 6", result);
+    }
+
+    @Test
+    void testEvaluateRoundWinnerNoTieHighCardWin() {
+        String input = "Black: 2H 3D 4S 5C 8D  White: 3S 8H 9C TC JD  Blue: 5H 7D 9S QC KC";
+        String result = Round.evaluateRoundWinner(input);
+
+        assertEquals("Blue wins. - with high card: King", result);
     }
 
     @Test
