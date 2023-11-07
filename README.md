@@ -3,3 +3,6 @@
 
 ### Description:
 Project to compare several pairs of poker hands and to indicate which, if either, has a higher rank.
+
+### Repository:
+[GitHub Link](https://github.com/JsonHoman/poker-hands)
