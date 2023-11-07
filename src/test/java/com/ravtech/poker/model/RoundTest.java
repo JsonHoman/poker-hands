@@ -53,7 +53,7 @@ class RoundTest {
         String input = "Black: 2H 3H 4H 5H 8D  White: 2D 3D 4D 5D 8H";
         String result = Round.evaluateRoundWinner(input);
 
-        assertEquals("Black & White tie. - with high card: 8", result);
+        assertEquals("Tie.", result);
     }
 
     @Test
@@ -85,7 +85,7 @@ class RoundTest {
         String input = "Black: 2H 3D 4S 5C 7D  White: 2S 3H 4D 5C 6D  Blue: 2C 3H 4D 5C 6D";
         String result = Round.evaluateRoundWinner(input);
 
-        assertEquals("White & Blue tie. - with straight: 6", result);
+        assertEquals("Tie.", result);
     }
 
     @Test

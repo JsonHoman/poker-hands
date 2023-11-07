@@ -21,6 +21,7 @@ public final class Round {
             boolean isTie = false;
             int comparisonVal;
             Set<Hand> ties = new LinkedHashSet<>();
+
             for (int i = 1; i < hands.size(); i++) {
                 Hand currentHand = hands.get(i);
 
@@ -122,11 +123,11 @@ public final class Round {
                     String valueStr = (tieBreakerValue != 0) ? Card.convertValueToString(tieBreakerValue) : highestValueStr;
                     roundResult = String.format("%s wins. - with %s: %s", playerNames, handTypeStr, valueStr);
                 } else {
-                    roundResult = String.format("%s tie. - with %s: %s", playerNames, handTypeStr, highestValueStr);
+                    roundResult = "Tie.";
                 }
                 break;
             default:
-                roundResult = (isTie) ? String.format("%s tie. - with %s: %s", playerNames, handTypeStr, highestValueStr) :
+                roundResult = (isTie) ? "Tie." :
                         String.format("%s wins. - with %s: %s", playerNames, handTypeStr, highestValueStr);
                 break;
         }
